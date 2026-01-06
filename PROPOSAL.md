@@ -2,27 +2,24 @@
 
 ## Group Members:
 
-names here.(CHANGE THIS!!!!!)
-       
+Solomon Binyaminov
+
 # Intentions:
 
-A statement of the problem you are solving and/or a high level description of the project. (CHANGE THIS!!!!!)
-    
+Full file editor using ncurses.
+
 # Intended usage:
 
-A description as to how the project will be used (describe the user interface). (CHANGE THIS!!!!!)
+User will be able to open/save files, edit text, scroll, move through the file using arrow keys, cut/copy/paste, jump to a certain line, and find text. 
   
 # Technical Details:
 
-(CHANGE THIS!!!!!)
-
-A description of your technical design. This should include: 
-   
-How you will be using the topics covered in class in the project.
-     
-How you are breaking down the project and who is responsible for which parts.
-  
+Core file functionality (saving and opening) will requiring working with files extensively, text editing will require working with / allocating memory, signals will be necessary for functions (copy, paste, cut, jump-x-lines, find-text), ncurses will also be used to make the terminal interactive which will require working with processes.
     
 # Intended pacing:
 
-A timeline with expected completion dates of parts of the project. (CHANGE THIS!!!!!)
+by 1/8: core ncurses 
+by 1/9: moving through terminal and editing text
+by 1/12: all file work. core program done (moving, editing, saving, and opening)
+by 1/14: easy functions. cut/copy/paste
+by 1/15: extra functions if time. jumping + finding.
