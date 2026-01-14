@@ -1,9 +1,17 @@
 #include <ncurses.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LINES 1024
+
 
 struct EditorState {
-  int cx, cy;     // Cursor position
-  int rows, cols; // Screen size
+  int cx, cy;
+  int rows, cols;
   int running;
+  char *lines[MAX_LINES];
+  int num_lines;  
+    
 };
 
 int main() {
@@ -12,6 +20,9 @@ int main() {
   E.running = 1;
   E.cx = 0;
   E.cy = 0;
+
+  E.lines[0] = strdup("");
+  E.num_lines = 1;  
 
   initscr();
   raw();
