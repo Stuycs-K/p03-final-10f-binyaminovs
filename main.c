@@ -1,3 +1,5 @@
+// bring in sick note
+
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>

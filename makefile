@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -std=c11
+CFLAGS = 
 
 LDFLAGS = -lncurses
 
