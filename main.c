@@ -2,7 +2,9 @@
 int main() {
   initscr();
   raw();
-  noecho();  
+  noecho();
+  keypad(stdscr, TRUE);
+  getch();  
   endwin();  
   return 0;  
 }
