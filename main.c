@@ -10,6 +10,11 @@ int main() {
   while (running) {
     int ch = getch();
 
+    clear();
+    mvprintw(0, 0, "Key code: %d", ch);
+    mvprintw(1, 0, "Press Ctrl+Q to quit");
+    refresh();
+
     switch (ch) {
     case 17:
       running = 0;
