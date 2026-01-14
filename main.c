@@ -10,9 +10,14 @@ int main() {
   while (running) {
     int ch = getch();
 
-    if (ch == 17) {
+    switch (ch) {
+    case 17:
       running = 0;
+      break;
+    default:
+      break;      
     }
+      
   }
   
   endwin();  
