@@ -57,9 +57,10 @@ int main() {
   getmaxyx(stdscr, E.rows, E.cols);
 
   while (E.running) {
-    draw_editor(&E);    
     int ch = getch();
-
+    // mvprintw(0, 0, "Key code: %d", ch);
+    draw_editor(&E);       
+    
     switch (ch) {
     case 17:
       E.running = 0;
