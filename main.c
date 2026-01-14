@@ -10,9 +10,14 @@ struct EditorState {
   int rows, cols;
   int running;
   char *lines[MAX_LINES];
-  int num_lines;  
-    
+  int num_lines;
 };
+
+int line_length(struct EditorState *E, int line) {
+    if (line < 0 || line >= E->num_lines) return 0;
+    return strlen(E->lines[line]);
+}
+
 
 int main() {
   struct EditorState E = {0};
