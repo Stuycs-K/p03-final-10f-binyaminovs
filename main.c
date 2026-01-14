@@ -60,15 +60,23 @@ int main() {
         E.cx--;
       break;
     case KEY_RIGHT:
-      E.cx++;
+      if (E.cx < line_length(&E, E.cy))
+        E.cx++;
       break;
     case KEY_UP:
-      if (E.cy > 0)
+      if (E.cy > 0) {
         E.cy--;
+        if (E.cx > line_length(&E, E.cy))
+          E.cx = line_length(&E, E.cy);
+      }
       break;
     case KEY_DOWN:
-      E.cy++;
-      break;
+      if (E.cy < E.num_lines - 1) {
+        E.cy++;
+        if (E.cx > line_length(&E, E.cy))
+          E.cx = line_length(&E, E.cy);
+      }
+      break;      
     default:
       break;
     }
