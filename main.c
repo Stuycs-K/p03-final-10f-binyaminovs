@@ -14,10 +14,19 @@ struct EditorState {
 };
 
 int line_length(struct EditorState *E, int line) {
-    if (line < 0 || line >= E->num_lines) return 0;
-    return strlen(E->lines[line]);
+  if (line < 0 || line >= E->num_lines)
+    return 0;
+  return strlen(E->lines[line]);  
 }
 
+void draw_editor(struct EditorState *E) {
+  clear();
+
+  for (int i = 0; i < E->num_lines && i < E->rows; i++) {
+    mvaddstr(i, 0, E->lines[i]);
+  }
+  refresh();  
+}
 
 int main() {
   struct EditorState E = {0};
@@ -34,15 +43,11 @@ int main() {
   noecho();
   keypad(stdscr, TRUE);
 
-  getmaxyx(stdscr, E.rows, E.cols);  
+  getmaxyx(stdscr, E.rows, E.cols);
 
   while (E.running) {
+    draw_editor(&E);    
     int ch = getch();
-
-    clear();
-    mvprintw(0, 0, "Key code: %d", ch);
-    mvprintw(1, 0, "Press Ctrl+Q to quit");
-    refresh();
 
     switch (ch) {
     case 17:
