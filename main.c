@@ -1,54 +1,46 @@
 #include <ncurses.h>
 
-struct EditorState {
-  int cx, cy;     // Cursor position
-  int rows, cols; // Screen size
-  int running;
-};
+typedef struct {
+    int cx, cy;
+    int rows, cols;
+    int running;
+} EditorState;
 
-int main() {
-  struct EditorState E = {0};
+int main(void) {
+    EditorState E = {0};
+    E.running = 1;
 
-  E.running = 1;
-  E.cx = 0;
-  E.cy = 0;
+    initscr();
+    raw();
+    noecho();
+    keypad(stdscr, TRUE);
 
-  initscr();
-  raw();
-  noecho();
-  keypad(stdscr, TRUE);
+    getmaxyx(stdscr, E.rows, E.cols);
 
-  while (E.running) {
-    int ch = getch();
+    while (E.running) {
+        int ch = getch();
 
-    clear();
-    mvprintw(0, 0, "Key code: %d", ch);
-    mvprintw(1, 0, "Press Ctrl+Q to quit");
-    refresh();
-
-    switch (ch) {
-    case 17:
-      E.running = 0;
-      break;
-    case KEY_LEFT:
-      if (E.cx > 0)
-        E.cx--;
-      break;
-    case KEY_RIGHT:
-      E.cx++;
-      break;
-    case KEY_UP:
-      if (E.cy > 0)
-        E.cy--;
-      break;
-    case KEY_DOWN:
-      E.cy++;
-      break;
-    default:
-      break;
+        switch (ch) {
+            case 17: 
+                E.running = 0;
+                break;
+            case KEY_LEFT:
+                if (E.cx > 0) E.cx--;
+                break;
+            case KEY_RIGHT:
+                if (E.cx < E.cols - 1) E.cx++;
+                break;
+            case KEY_UP:
+                if (E.cy > 0) E.cy--;
+                break;
+            case KEY_DOWN:
+                if (E.cy < E.rows - 1) E.cy++;
+                break;
+            default:
+                break;
+        }
     }
-  }
 
-  endwin();
-  return 0;
+    endwin();
+    return 0;
 }
