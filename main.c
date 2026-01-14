@@ -1,13 +1,24 @@
 #include <ncurses.h>
+
+struct EditorState {
+    int cx, cy;     // Cursor position
+    int rows, cols; // Screen size
+    int running;
+};
+
 int main() {
-  int running = 1;
+  struct EditorState E = {0};
+
+  E.running = 1;  
+  E.cx = 0;
+  E.cy = 0;  
   
   initscr();
   raw();
   noecho();
   keypad(stdscr, TRUE);
   
-  while (running) {
+  while (E.running) {
     int ch = getch();
 
     clear();
@@ -17,7 +28,7 @@ int main() {
 
     switch (ch) {
     case 17:
-      running = 0;
+      E.running = 0;
       break;
     default:
       break;      
