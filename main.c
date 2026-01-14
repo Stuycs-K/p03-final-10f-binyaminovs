@@ -25,7 +25,16 @@ void draw_editor(struct EditorState *E) {
   for (int i = 0; i < E->num_lines && i < E->rows; i++) {
     mvaddstr(i, 0, E->lines[i]);
   }
-  refresh();  
+
+  int cx = E->cx;
+  int cy = E->cy;
+
+  int len = line_length(E, cy);
+  if (cx > len)
+    cx = len;  
+
+  move(cy, cx);
+  refresh();
 }
 
 int main() {
