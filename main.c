@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define MAX_LINES 1024
-
+#define MAX_LINE_LENGTH 1024
 
 struct EditorState {
   int cx, cy;
@@ -33,6 +33,8 @@ void search_text(struct EditorState *E) {
       break;
     }
   }
+
+  curs_set(1);  
 }
 
 void delete_line(struct EditorState *E) {
@@ -78,13 +80,10 @@ void insert_char(struct EditorState *E, char c) {
   char *line = E->lines[E->cy];
   int len = strlen(line);
 
-  if (len >= E->cols - 1)
+  if (len >= MAX_LINE_LENGTH - 1)
     return;
 
-  for (int i = len; i >= E->cx; i--) {
-    line[i + 1] = line[i];
-  }
-
+  memmove(line + E->cx + 1, line + E->cx, len - E->cx + 1);
   line[E->cx] = c;
   E->cx++;
 }
@@ -107,18 +106,18 @@ void insert_newline(struct EditorState *E) {
   if (E->num_lines >= MAX_LINES)
     return;
 
-  char *current = E->lines[E->cy];
-  int len = strlen(current);
-
   for (int i = E->num_lines; i > E->cy + 1; i--) {
-    E->lines[i] = E->lines[i - 1];
+    memcpy(E->lines[i], E->lines[i - 1], MAX_LINE_LENGTH);
   }
 
-  E->lines[E->cy + 1] = strdup(current + E->cx);
-  current[E->cx] = '\0';
+  memmove(E->lines[E->cy + 1], E->lines[E->cy] + E->cx,
+          MAX_LINE_LENGTH - E->cx);
+
+  E->lines[E->cy][E->cx] = '\0';
 
   E->num_lines++;
   E->cy++;
+
   E->cx = 0;  
 }
 
@@ -182,6 +181,12 @@ void draw_editor(struct EditorState *E) {
 
 int main(int argc, char **argv) {
   struct EditorState E = {0};
+  char *clipboard = NULL;
+
+  for (int i = 0; i < MAX_LINES; i++) {
+    E.lines[i] = calloc(MAX_LINE_LENGTH, sizeof(char));
+  }
+  E.num_lines = 1;  
   E.running = 1;
 
   if (argc >= 2) {
@@ -256,7 +261,21 @@ int main(int argc, char **argv) {
       break;
     case 6:      
       search_text(&E);
-      break;      
+      break;
+    case 3:      
+      if (clipboard) free(clipboard);
+      clipboard = strdup(E.lines[E.cy]);
+      break;
+    case 22:
+      if (clipboard) {
+        if (E.num_lines >= MAX_LINES)
+          break;
+        for (int i = E.num_lines; i > E.cy + 1; i--)
+          E.lines[i] = E.lines[i - 1];
+        E.lines[E.cy + 1] = strdup(clipboard);
+        E.num_lines++;
+      }      
+    break;      
     default:
       if (ch >= 32 && ch <= 126) {
         insert_char(&E, (char)ch);
@@ -274,7 +293,7 @@ int main(int argc, char **argv) {
   if (E.filename){
     free(E.filename);
   }
-  
+  if (clipboard) free(clipboard);
   endwin();
   return 0;
 }
