@@ -15,6 +15,22 @@ struct EditorState {
   char *filename;  
 };
 
+
+void save_file(struct EditorState *E) {
+  if (!E->filename)
+    return;
+
+  FILE *fp = fopen(E->filename, "w");
+  if (!fp)
+    return;
+
+  for (int i = 0; i < E->num_lines; i++) {
+    fprintf(fp, "%s\n", E->lines[i]);
+  }
+
+  fclose(fp);  
+}
+
 void insert_char(struct EditorState *E, char c) {
   if (E->cy >= MAX_LINES)
     return;
@@ -188,6 +204,9 @@ int main(int argc, char **argv) {
     case 10:
     case 13:      
       insert_newline(&E);
+      break;
+    case 19:
+      save_file(&E);
       break;      
     default:
       if (ch >= 32 && ch <= 126) {
