@@ -122,19 +122,22 @@ int line_length(struct EditorState *E, int line) {
 void draw_editor(struct EditorState *E) {
   clear();
 
-  for (int i = 0; i < E->num_lines && i < E->rows; i++) {
+  for (int i = 0; i < E->num_lines && i < E->rows - 1; i++) {
     mvaddstr(i, 0, E->lines[i]);
   }
 
+  mvhline(E->rows - 1, 0, ' ', E->cols);
+  mvprintw(E->rows - 1, 0, "File: %s  Lines: %d  Pos: %d,%d",
+           E->filename ? E->filename : "[No Name]", E->num_lines, E->cy + 1,
+           E->cx + 1);
+
   int cx = E->cx;
   int cy = E->cy;
-
-  int len = line_length(E, cy);
-  if (cx > len)
-    cx = len;  
+  if (cx > line_length(E, cy))
+    cx = line_length(E, cy);
 
   move(cy, cx);
-  refresh();
+  refresh();  
 }
 
 int main(int argc, char **argv) {
@@ -218,6 +221,14 @@ int main(int argc, char **argv) {
     draw_editor(&E);           
   }
 
+  for (int i = 0; i < E.num_lines; i++) {
+    free(E.lines[i]);
+  }
+  
+  if (E.filename){
+    free(E.filename);
+  }
+  
   endwin();
   return 0;
 }
