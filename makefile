@@ -4,11 +4,11 @@ CFLAGS =
 
 LDFLAGS = -lncurses
 
-SRCS = main.c
+SRCS = edit.c
 
 HEADERS = 
 
-TARGET = main
+TARGET = edit
 
 run: $(TARGET)
 	@./$(TARGET)
