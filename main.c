@@ -15,6 +15,24 @@ struct EditorState {
   char *filename;  
 };
 
+void insert_char(struct EditorState *E, char c) {
+  if (E->cy >= MAX_LINES)
+    return;
+
+  char *line = E->lines[E->cy];
+  int len = strlen(line);
+
+  if (len >= E->cols - 1)
+    return;
+
+  for (int i = len; i >= E->cx; i--) {
+    line[i + 1] = line[i];
+  }
+
+  line[E->cx] = c;
+  E->cx++;  
+}
+
 void open_file(struct EditorState *E, const char *filename) {
   FILE *fp = fopen(filename, "r");
   if (!fp) {
