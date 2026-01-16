@@ -138,16 +138,16 @@ int main(int argc, char **argv) {
   E.cy = 0;
 
   initscr();
+  cbreak();
   raw();
-  noecho();
   keypad(stdscr, TRUE);
+  nodelay(stdscr, FALSE);  
 
   getmaxyx(stdscr, E.rows, E.cols);
 
   while (E.running) {
     int ch = getch();
     // mvprintw(0, 0, "Key code: %d", ch);
-    draw_editor(&E);       
     
     switch (ch) {
     case 17:
@@ -186,6 +186,7 @@ int main(int argc, char **argv) {
       backspace_char(&E);
       break;
     case 10:
+    case 13:      
       insert_newline(&E);
       break;      
     default:
@@ -194,6 +195,8 @@ int main(int argc, char **argv) {
       }      
       break;
     }
+
+    draw_editor(&E);           
   }
 
   endwin();
