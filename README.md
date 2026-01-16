@@ -4,7 +4,12 @@
 ### solo-bolo
 
 Solomon Binyaminov
-       
+
+### Video demo
+
+https://www.youtube.com/watch?v=xCyhznvUxSs
+first few seconds of audio are off
+
 ### Project Description:
 
 Terminal text editor
@@ -12,10 +17,17 @@ Terminal text editor
 ### Instructions:
 
 How does the user install/compile/run the program:
-make run
+make compile
+./edit "file_name.txt"
 
 How does the user interact with this program?:
-not decided yet
+basic keyboard shortcuts discussed in presentation and used in most text editors (arrow keys, ctrl-s to save, ctrl-q to quit are the basic ones)
+
+required libraries:
+<ncurses.h>
+<stdlib.h>
+<string.h>
+<stdio.h>
 
 ### Resources/ References:
 
