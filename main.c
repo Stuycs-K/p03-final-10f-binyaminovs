@@ -15,6 +15,46 @@ struct EditorState {
   char *filename;  
 };
 
+void search_text(struct EditorState *E) {
+  char query[256];
+  mvhline(E->rows - 1, 0, ' ', E->cols);
+  mvprintw(E->rows - 1, 0, "Search: ");
+  echo();  
+  curs_set(1);
+  getnstr(query, 255);
+  noecho();
+  curs_set(0);
+
+  for (int i = 0; i < E->num_lines; i++) {
+    char *pos = strstr(E->lines[i], query);
+    if (pos) {      
+      E->cy = i;
+      E->cx = pos - E->lines[i];
+      break;
+    }
+  }
+}
+
+void delete_line(struct EditorState *E) {
+  if (E->num_lines <= 1) {
+    E->lines[0][0] = '\0';
+    return;
+  }  
+
+  free(E->lines[E->cy]);
+
+  for (int i = E->cy; i < E->num_lines - 1; i++) {
+    E->lines[i] = E->lines[i + 1];
+  }  
+
+  E->lines[E->num_lines - 1] = strdup("");
+  E->num_lines--;
+
+  if (E->cy >= E->num_lines)
+    E->cy = E->num_lines - 1;
+  
+  E->cx = 0;  
+}
 
 void save_file(struct EditorState *E) {
   if (!E->filename)
@@ -210,6 +250,12 @@ int main(int argc, char **argv) {
       break;
     case 19:
       save_file(&E);
+      break;
+    case 4:
+      delete_line(&E);
+      break;
+    case 6:      
+      search_text(&E);
       break;      
     default:
       if (ch >= 32 && ch <= 126) {
