@@ -148,8 +148,11 @@ int main(int argc, char **argv) {
         if (E.cx > line_length(&E, E.cy))
           E.cx = line_length(&E, E.cy);
       }
-      break;      
+      break;
     default:
+      if (ch >= 32 && ch <= 126) {
+        insert_char(&E, (char)ch);
+      }      
       break;
     }
   }
