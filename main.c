@@ -30,7 +30,21 @@ void insert_char(struct EditorState *E, char c) {
   }
 
   line[E->cx] = c;
-  E->cx++;  
+  E->cx++;
+}
+
+void backspace_char(struct EditorState *E) {
+  if (E->cx == 0)
+    return;
+
+  char *line = E->lines[E->cy];
+  int len = strlen(line);
+
+  for (int i = E->cx - 1; i < len; i++) {
+    line[i] = line[i + 1];
+  }
+
+  E->cx--;  
 }
 
 void open_file(struct EditorState *E, const char *filename) {
@@ -149,6 +163,9 @@ int main(int argc, char **argv) {
           E.cx = line_length(&E, E.cy);
       }
       break;
+    case 127: 
+      backspace_char(&E);
+      break;      
     default:
       if (ch >= 32 && ch <= 126) {
         insert_char(&E, (char)ch);
